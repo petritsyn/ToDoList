@@ -1,57 +1,68 @@
-import React, {useState} from 'react';
+import React, {KeyboardEvent, ChangeEvent, useState} from 'react';
 
 type TaskType = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 }
 
 type PropsType = {
     title: string
-    tasks: Array<TaskType>
-    removeTask: (id: number) => void
-    /*tasksFilter: (nameButton: 'all' | 'active' | 'completed') => void*/
+    prokladka: Array<TaskType>
+    removeTask: (id: string) => void
+    tasksFilter: (buttonName: string) => void
+    addTask: (newTitle: string) => void
 }
+
 
 export function Todolist(props: PropsType) {
 
-    let [valueButton, setValueButton] = useState('all');
+    const [newTitle, setNewTitle] = useState('');
 
-    const tasksFilter = (nameButton: string) => {
-        setValueButton(nameButton)
+    const newTitleHandler = () => {
+        props.addTask(newTitle);
+        setNewTitle('');
     }
 
-    let prokladka = props.tasks;
-
-    if (valueButton === 'active') {
-        prokladka = props.tasks.filter(el => !el.isDone)
+    const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            newTitleHandler();
+        }
     }
-    if (valueButton === 'completed') {
-        prokladka = props.tasks.filter(el => el.isDone)
+
+    const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        setNewTitle(event.currentTarget.value)
+    }
+
+    const filterHandler = (buttonName: string) => {
+        props.tasksFilter(buttonName)
+    }
+
+    const removeTaskHandler = (id: string) => {
+        props.removeTask(id)
     }
 
     return <div>
         <h3>{props.title}</h3>
         <div>
-            <input/>
-            <button>+</button>
+            <input onChange={onChangeHandler} value={newTitle} onKeyPress={onKeyPressHandler}/>
+            <button onClick={newTitleHandler}>+</button>
         </div>
         <ul>
-            {
-                prokladka.map((el) => {
-                    return (
-                        <li key={el.id}>
-                            <button onClick={ () => props.removeTask(el.id) }>x</button>
-                            <input type="checkbox" checked={el.isDone}/> <span>{el.title}</span>
-                        </li>
-                    )
-                })
-            }
+            {props.prokladka.map((el) => {
+                return (
+                    <li key={el.id}>
+                        <button onClick={() => removeTaskHandler(el.id)}>X</button>
+                        <input type="checkbox" checked={el.isDone}/>
+                        <span>{el.title}</span>
+                    </li>
+                )
+            })}
         </ul>
         <div>
-            <button onClick={ () => tasksFilter('all')}>All</button>
-            <button onClick={ () => tasksFilter('active')}>Active</button>
-            <button onClick={ () => tasksFilter('completed')}>Completed</button>
+            <button onClick={() => filterHandler("All")}>All</button>
+            <button onClick={() => filterHandler("Active")}>Active</button>
+            <button onClick={() => filterHandler('Completed')}>Completed</button>
         </div>
     </div>
 }
