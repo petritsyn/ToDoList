@@ -1,7 +1,9 @@
 import {FilterValuesType, TodolistType} from "../App";
 import {v1} from "uuid";
 
-export const todolistsReducer = (state: Array<TodolistType>, action: todolistsReducerType) => {
+const initialState: Array<TodolistType> = []
+
+export const todolistsReducer = (state = initialState, action: todolistsReducerType): Array<TodolistType> => {
     switch (action.type) {
         case "REMOVE-TODOLIST":
             // // засунем в стейт список тудулистов, id которых не равны тому, который нужно выкинуть
