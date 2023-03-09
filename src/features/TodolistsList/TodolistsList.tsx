@@ -69,7 +69,6 @@ export const TodolistsList: React.FC = () => {
         dispatch(thunk)
     }, [])
 
-
     return <>
         <Grid container style={{padding: '20px'}}>
             <AddItemForm addItem={addTodolist}/>
@@ -78,7 +77,6 @@ export const TodolistsList: React.FC = () => {
             {
                 todolists.map(tl => {
                     let allTodolistTasks = tasks[tl.id]
-
                     return <Grid item key={tl.id}>
                         <Paper style={{padding: '10px'}}>
                             <Todolist
@@ -87,6 +85,7 @@ export const TodolistsList: React.FC = () => {
                                 tasks={allTodolistTasks}
                                 removeTask={removeTask}
                                 changeFilter={changeFilter}
+                                entityStatus={tl.entityStatus}
                                 addTask={addTask}
                                 changeTaskStatus={changeStatus}
                                 filter={tl.filter}
