@@ -4,7 +4,7 @@ const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
     withCredentials: true,
     headers: {
-        'API-KEY': '7d54e03a-c727-4a11-92e7-335f41a4e836'
+        'API-KEY': '5fc11a34-7258-4926-8c00-91db4f940cfd'
     }
 })
 
@@ -50,11 +50,6 @@ export type ResponseType<D = {}> = {
     data: D
 }
 
-export enum ResultCode {
-    Successed = 0,
-    Failed = 1,
-    Captcha = 10
-}
 
 export enum TaskStatuses {
     New = 0,
