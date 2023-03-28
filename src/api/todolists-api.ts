@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios'
+import {LoginParamsType} from "../features/Login/Login";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
     withCredentials: true,
     headers: {
-        'API-KEY': '5fc11a34-7258-4926-8c00-91db4f940cfd'
+        'API-KEY': '7d54e03a-c727-4a11-92e7-335f41a4e836'
     }
 })
 
@@ -33,6 +34,21 @@ export const todolistsAPI = {
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
         return instance.put<UpdateTaskModelType, AxiosResponse<ResponseType<{ item: TaskType }>>>(`todo-lists/${todolistId}/tasks/${taskId}`, model);
+    }
+}
+
+export const authAPI = {
+    login(payload: LoginParamsType) {
+        return instance.post<ResponseType<{userId: number}>>(`auth/login`, payload)
+            .then(res => res.data)
+    },
+    me() {
+        return instance.get<ResponseType<{userId: number}>>(`auth/me`)
+            .then(res => res.data)
+    },
+    logout() {
+        return instance.delete<ResponseType<{userId: number}>>(`auth/login`)
+            .then(res => res.data)
     }
 }
 
