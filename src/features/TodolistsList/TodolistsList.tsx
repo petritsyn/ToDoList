@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect} from 'react'
-import {useAppDispatch, useAppSelector} from '../../app/store'
+import {useDispatch, useSelector} from 'react-redux'
+import {AppRootStateType} from '../../app/store'
 import {
     addTodolistTC,
     changeTodolistFilterAC,
@@ -11,21 +12,24 @@ import {
 } from './todolists-reducer'
 import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from './tasks-reducer'
 import {TaskStatuses} from '../../api/todolists-api'
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
+import {Grid, Paper} from '@material-ui/core'
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm'
 import {Todolist} from './Todolist/Todolist'
-import {Navigate} from "react-router-dom";
+import { Redirect } from 'react-router-dom'
 
+type PropsType = {
+    demo?: boolean
+}
 
-export const TodolistsList: React.FC = () => {
-    const todolists = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-    const tasks = useAppSelector<TasksStateType>(state => state.tasks)
-    const dispatch = useAppDispatch()
+export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
+    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
+    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        if (!isLoggedIn) {
+        if (demo || !isLoggedIn) {
             return;
         }
         const thunk = fetchTodolistsTC()
@@ -73,7 +77,7 @@ export const TodolistsList: React.FC = () => {
     }, [dispatch])
 
     if (!isLoggedIn) {
-        return <Navigate to={'/login'}/>
+        return <Redirect to={"/login"} />
     }
 
     return <>
@@ -97,6 +101,7 @@ export const TodolistsList: React.FC = () => {
                                 removeTodolist={removeTodolist}
                                 changeTaskTitle={changeTaskTitle}
                                 changeTodolistTitle={changeTodolistTitle}
+                                demo={demo}
                             />
                         </Paper>
                     </Grid>
