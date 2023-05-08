@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import {
@@ -12,7 +12,7 @@ import {
 	Typography
 } from '@mui/material';
 import { Menu } from '@mui/icons-material'
-import { Login } from 'features/auth/Login'
+import { Login } from 'features/auth/Login/Login'
 import './App.css'
 import { TodolistsList } from 'features/TodolistsList/TodolistsList'
 import { ErrorSnackbar } from 'common/components'
@@ -29,12 +29,10 @@ function App() {
 	const {initializeApp, logout} = useActions(authThunks)
 
 	useEffect(() => {
-		initializeApp()
+		initializeApp({})
 	}, [])
 
-
-	const logoutHandler = () => logout()
-
+	const logoutHandler = () => logout({})
 
 	if (!isInitialized) {
 		return <div
